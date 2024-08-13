@@ -24,9 +24,8 @@ $registerAlias = new Container\RegisterAlias(
     Container\RegisterAlias::ID_GENERATOR_RANDOM
 );
 
-$returnUrls = new Container\ReturnUrls(
-    'http://www.mysite.ch/success',
-    'http://www.mysite.ch/fail'
+$returnUrl = new Container\ReturnUrl(
+    'http://www.mysite.ch/success'
 );
 
 // -----------------------------
@@ -37,7 +36,7 @@ $insertRequest = new AliasInsertRequest(
     $requestConfig,
     $registerAlias,
     AliasInsertRequest::TYPE_CARD,
-    $returnUrls
+    $returnUrl
 );
 
 // -----------------------------
@@ -68,4 +67,4 @@ echo 'Redirect to: ' . $response->getRedirect()->getRedirectUrl() ."<br>\n";
 // -----------------------------
 // Step 7:
 // On success page and notification url, assert that the payment has been successful.
-// -> see example-alias-insert-assert.php
+// see: example-alias-insert-assert.php

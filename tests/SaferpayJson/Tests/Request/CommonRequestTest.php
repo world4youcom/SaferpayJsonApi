@@ -6,6 +6,7 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use GuzzleHttp\Psr7\Utils as GuzzleUtils;
+use InvalidArgumentException;
 use JMS\Serializer\SerializerBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -16,11 +17,9 @@ use Ticketpark\SaferpayJson\Response\Response;
 
 abstract class CommonRequestTest extends TestCase
 {
-    /** @var bool */
-    private $successful;
+    private ?bool $successful = null;
 
-    /** @var ?string */
-    private $successfulResponseClass;
+    private ?string $successfulResponseClass = null;
 
     abstract protected function getInstance();
 
@@ -30,6 +29,40 @@ abstract class CommonRequestTest extends TestCase
 
         $this->successful = false;
         $this->executeRequest();
+    }
+
+    public function getRequestConfigValidationParams(): array
+    {
+        return [
+            'first try' => [null, RequestConfig::MIN_RETRY_INDICATOR],
+            'second try' => [uniqid(), RequestConfig::MIN_RETRY_INDICATOR + 1],
+            'last try' => [uniqid(), RequestConfig::MAX_RETRY_INDICATOR],
+            'try after all retries exceeded' => [uniqid(), RequestConfig::MAX_RETRY_INDICATOR + 1, InvalidArgumentException::class],
+        ];
+    }
+
+    /**
+     * @dataProvider getRequestConfigValidationParams
+     */
+    public function testRequestConfigValidation(
+        ?string $requestId,
+        int     $retryIndicator,
+        ?string $expectedException = null): void
+    {
+        $config = new RequestConfig(
+            'apiKey',
+            'apiSecret',
+            'customerId',
+            false
+        );
+
+        if ($expectedException !== null) {
+            $this->expectException($expectedException, $requestId, $retryIndicator);
+        }
+
+        $config
+            ->setRequestId($requestId)
+            ->setRetryIndicator($retryIndicator);
     }
 
     public function doTestSuccessfulResponse(string $responseClass): void
@@ -89,7 +122,7 @@ abstract class CommonRequestTest extends TestCase
 
         $response->expects($this->any())
             ->method('getStatusCode')
-            ->will($this->returnValue($this->successful ? 200: 404));
+            ->will($this->returnValue($this->successful ? 200 : 404));
 
         if ($this->successful) {
             $content = $this->getFakedApiResponse($this->successfulResponseClass);
@@ -106,7 +139,11 @@ abstract class CommonRequestTest extends TestCase
 
     private function getFakedApiResponse(string $class): string
     {
-        AnnotationRegistry::registerLoader('class_exists');
+        // Support for doctrine/annotations 1.x
+        if (method_exists(AnnotationRegistry::class, 'registerLoader')) {
+            AnnotationRegistry::registerLoader('class_exists');
+        }
+
         $serializer = SerializerBuilder::create()->build();
 
         $response = new $class();

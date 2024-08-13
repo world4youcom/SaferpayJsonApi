@@ -5,41 +5,33 @@ declare(strict_types=1);
 namespace Ticketpark\SaferpayJson\Request\Container;
 
 use JMS\Serializer\Annotation\SerializedName;
-use JMS\Serializer\Annotation\Type;
 
 final class Card
 {
     /**
-     * @var string|null
      * @SerializedName("Number")
      */
-    private $number;
+    private ?string $number = null;
 
     /**
-     * @var int|null
      * @SerializedName("ExpYear")
-     * @Type("integer")
      */
-    private $expYear;
+    private ?int $expYear = null;
 
     /**
-     * @var int|null
      * @SerializedName("ExpMonth")
-     * @Type("integer")
      */
-    private $expMonth;
+    private ?int $expMonth = null;
 
     /**
-     * @var string|null
      * @SerializedName("HolderName")
      */
-    private $holderName;
+    private ?string $holderName = null;
 
     /**
-     * @var string|null
      * @SerializedName("CountryCode")
      */
-    private $countryCode;
+    private ?string $countryCode = null;
 
     public function getNumber(): ?string
     {

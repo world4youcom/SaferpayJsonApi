@@ -5,37 +5,33 @@ declare(strict_types=1);
 namespace Ticketpark\SaferpayJson\Response\Container;
 
 use JMS\Serializer\Annotation\SerializedName;
-use JMS\Serializer\Annotation\Type;
 
 final class ThreeDs
 {
     /**
-     * @var bool|null
      * @SerializedName("Authenticated")
-     * @Type("boolean")
      */
-    private $authenticated;
+    private ?bool $authenticated = null;
 
     /**
-     * @var bool|null
      * @SerializedName("LiabilityShift")
-     * @Type("boolean")
      */
-    private $liabilityShift;
+    private ?bool $liabilityShift = null;
 
     /**
-     * @var string|null
      * @SerializedName("Xid")
-     * @Type("string")
      */
-    private $xid;
+    private ?string $xid = null;
 
     /**
-     * @var string|null
-     * @SerializedName("VerificationValue")
-     * @Type("string")
+     * @SerializedName("Version")
      */
-    private $verificationValue;
+    private ?string $version = null;
+
+    /**
+     * @SerializedName("AuthenticationType")
+     */
+    private ?string $authenticationType = null;
 
     public function isAuthenticated(): ?bool
     {
@@ -52,8 +48,13 @@ final class ThreeDs
         return $this->xid;
     }
 
-    public function getVerificationValue(): ?string
+    public function getVersion(): ?string
     {
-        return $this->verificationValue;
+        return $this->version;
+    }
+
+    public function getAuthenticationType(): ?string
+    {
+        return $this->authenticationType;
     }
 }

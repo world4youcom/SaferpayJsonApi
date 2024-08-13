@@ -28,9 +28,8 @@ $amount = new Container\Amount(
 $payment = new Container\Payment($amount);
 $payment->setDescription('Order No. 12840');
 
-$returnUrls = new Container\ReturnUrls(
-    'http://www.mysite.ch/success?orderId=12840',
-    'http://www.mysite.ch/fail'
+$returnUrl = new Container\ReturnUrl(
+    'http://www.mysite.ch/success?orderId=12840'
 );
 
 // -----------------------------
@@ -41,7 +40,7 @@ $initializeRequest = new InitializeRequest(
     $requestConfig,
     $terminalId,
     $payment,
-    $returnUrls
+    $returnUrl
 );
 
 // Note: More data can be provided to InitializeRequest with setters,
@@ -71,9 +70,9 @@ echo 'Redirect to: ' . $response->getRedirect()->getRedirectUrl() ."<br>\n";
 // -----------------------------
 // Step 6:
 // Fill in test payment page. For dummy credit card numbers see
-// https://saferpay.github.io/sndbx/paymentmeans.html
+// https://docs.saferpay.com/home/integration-guide/testing-and-go-live
 
 // -----------------------------
 // Step 7:
-// On success page and notification url, assert that the payment has been successful.
-// TODO: -> see example-assert.php
+// Authorize the transaction:
+// see: example-authorize.php

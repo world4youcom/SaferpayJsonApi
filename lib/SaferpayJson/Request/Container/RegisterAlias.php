@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Ticketpark\SaferpayJson\Request\Container;
 
 use JMS\Serializer\Annotation\SerializedName;
-use JMS\Serializer\Annotation\Type;
 
 final class RegisterAlias
 {
@@ -14,23 +13,19 @@ final class RegisterAlias
     public const ID_GENERATOR_RANDOM_UNIQUE = 'RANDOM_UNIQUE';
 
     /**
-     * @var string
      * @SerializedName("IdGenerator")
      */
-    private $idGenerator;
+    private string $idGenerator;
 
     /**
-     * @var string|null
      * @SerializedName("Id")
      */
-    private $id;
+    private ?string $id = null;
 
     /**
-     * @var int|null
      * @SerializedName("Lifetime")
-     * @Type("integer")
      */
-    private $lifetime;
+    private ?int $lifetime = null;
 
     public function __construct(string $idGenerator)
     {

@@ -11,10 +11,11 @@ use Ticketpark\SaferpayJson\Request\Container\Order;
 use Ticketpark\SaferpayJson\Request\Container\Payer;
 use Ticketpark\SaferpayJson\Request\Container\Payment;
 use Ticketpark\SaferpayJson\Request\Container\PaymentMeans;
-use Ticketpark\SaferpayJson\Request\Container\ReturnUrls;
+use Ticketpark\SaferpayJson\Request\Container\RedirectNotifyUrls;
+use Ticketpark\SaferpayJson\Request\Container\ReturnUrl;
 use Ticketpark\SaferpayJson\Request\Container\RiskFactors;
 use Ticketpark\SaferpayJson\Request\Container\Styling;
-use Ticketpark\SaferpayJson\Request\Container\Wallet;
+use Ticketpark\SaferpayJson\Request\Container\Transaction\Notification;
 use Ticketpark\SaferpayJson\Request\Request;
 use Ticketpark\SaferpayJson\Request\RequestCommonsTrait;
 use Ticketpark\SaferpayJson\Request\RequestConfig;
@@ -23,7 +24,6 @@ use Ticketpark\SaferpayJson\Response\Transaction\InitializeResponse;
 final class InitializeRequest extends Request
 {
     use RequestCommonsTrait;
-
     public const API_PATH = '/Payment/v1/Transaction/Initialize';
     public const RESPONSE_CLASS = InitializeResponse::class;
 
@@ -36,94 +36,91 @@ final class InitializeRequest extends Request
     public const PAYMENT_METHOD_MAESTRO = "MAESTRO";
     public const PAYMENT_METHOD_MASTERCARD = "MASTERCARD";
     public const PAYMENT_METHOD_MYONE = "MYONE";
-    public const PAYMENT_METHOD_UNIONPAY = "UNIONPAY";
     public const PAYMENT_METHOD_VISA = "VISA";
-    public const PAYMENT_METHOD_VPAY = "VPAY";
+    public const PAYMENT_METHOD_WECHATPAY = "WECHATPAY";
 
     public const WALLET_MASTERPASS = "MASTERPASS";
 
     /**
-     * @var string|null
      * @SerializedName("ConfigSet")
      */
-    private $configSet;
+    private ?string $configSet = null;
+
     /**
-     * @var string
      * @SerializedName("TerminalId")
      */
-    private $terminalId;
+    private string $terminalId;
 
     /**
-     * @var Payment
      * @SerializedName("Payment")
      */
-    private $payment;
+    private Payment $payment;
 
     /**
-     * @var PaymentMeans|null
      * @SerializedName("PaymentMeans")
      */
-    private $paymentMeans;
+    private ?PaymentMeans $paymentMeans = null;
+
     /**
-     * @var Authentication|null
      * @SerializedName("Authentication")
      */
-    private $authentication;
+    private ?Authentication $authentication = null;
+
     /**
-     * @var Payer|null
      * @SerializedName("Payer")
      */
-    private $payer;
-    /**
-     * @var ReturnUrls
-     * @SerializedName("ReturnUrls")
-     */
-    private $returnUrls;
+    private ?Payer $payer = null;
 
     /**
-     * @var Styling|null
+     * @SerializedName("ReturnUrl")
+     */
+    private ?ReturnUrl $returnUrl;
+
+    /**
      * @SerializedName("Styling")
      */
-    private $styling;
+    private ?Styling $styling = null;
 
-    /**
-     * @var Wallet|null
-     * @SerializedName("Wallet")
-     */
-    private $wallet;
     /**
      * @var array<string>|null
      * @SerializedName("PaymentMethods")
      */
-    private $paymentMethods;
+    private ?array $paymentMethods = null;
 
     /**
-     * @var Order|null
      * @SerializedName("Order")
      */
-    private $order;
+    private ?Order $order = null;
 
     /**
-     * @var RiskFactors|null
      * @SerializedName("RiskFactors")
      */
-    private $riskFactors;
+    private ?RiskFactors $riskFactors = null;
 
     /**
-     * @var CardForm|null
      * @SerializedName("CardForm")
      */
-    private $cardForm;
+    private ?CardForm $cardForm = null;
+
+    /**
+     * @SerializedName("RedirectNotifyUrls")
+     */
+    private ?RedirectNotifyUrls $redirectNotifyUrls = null;
+
+    /**
+     * @SerializedName("Notification")
+     */
+    private ?Notification $notification = null;
 
     public function __construct(
         RequestConfig $requestConfig,
         string        $terminalId,
         Payment       $payment,
-        ReturnUrls    $returnUrls
+        ReturnUrl    $returnUrl
     ) {
         $this->terminalId = $terminalId;
         $this->payment = $payment;
-        $this->returnUrls = $returnUrls;
+        $this->returnUrl = $returnUrl;
 
         parent::__construct($requestConfig);
     }
@@ -136,63 +133,72 @@ final class InitializeRequest extends Request
         return $response;
     }
 
-    public function setConfigSet(?string $configSet): InitializeRequest
+    public function setConfigSet(?string $configSet): self
     {
         $this->configSet = $configSet;
+
         return $this;
     }
 
-    public function setPaymentMeans(?PaymentMeans $paymentMeans): InitializeRequest
+    public function setPaymentMeans(?PaymentMeans $paymentMeans): self
     {
         $this->paymentMeans = $paymentMeans;
+
         return $this;
     }
 
-    public function setAuthentication(?Authentication $authentication): InitializeRequest
+    public function setAuthentication(?Authentication $authentication): self
     {
         $this->authentication = $authentication;
+
         return $this;
     }
 
-    public function setPayer(?Payer $payer): InitializeRequest
+    public function setPayer(?Payer $payer): self
     {
         $this->payer = $payer;
+
         return $this;
     }
 
-    public function setStyling(?Styling $styling): InitializeRequest
+    public function setStyling(?Styling $styling): self
     {
         $this->styling = $styling;
+
         return $this;
     }
 
-    public function setWallet(?Wallet $wallet): InitializeRequest
-    {
-        $this->wallet = $wallet;
-        return $this;
-    }
-
-    public function setPaymentMethods(?array $paymentMethods): InitializeRequest
+    public function setPaymentMethods(?array $paymentMethods): self
     {
         $this->paymentMethods = $paymentMethods;
+
         return $this;
     }
 
-    public function setOrder(?Order $order): InitializeRequest
+    public function setOrder(?Order $order): self
     {
         $this->order = $order;
+
         return $this;
     }
 
-    public function setRiskFactors(?RiskFactors $riskFactors): InitializeRequest
+    public function setRiskFactors(?RiskFactors $riskFactors): self
     {
         $this->riskFactors = $riskFactors;
+
         return $this;
     }
 
-    public function setCardForm(?CardForm $cardForm): InitializeRequest
+    public function setCardForm(?CardForm $cardForm): self
     {
         $this->cardForm = $cardForm;
+
+        return $this;
+    }
+
+    public function setRedirectNotifyUrls(?RedirectNotifyUrls $redirectNotifyUrls): self
+    {
+        $this->redirectNotifyUrls = $redirectNotifyUrls;
         return $this;
     }
 
@@ -226,19 +232,14 @@ final class InitializeRequest extends Request
         return $this->payer;
     }
 
-    public function getReturnUrls(): ReturnUrls
+    public function getReturnUrl(): ?ReturnUrl
     {
-        return $this->returnUrls;
+        return $this->returnUrl;
     }
 
     public function getStyling(): ?Styling
     {
         return $this->styling;
-    }
-
-    public function getWallet(): ?Wallet
-    {
-        return $this->wallet;
     }
 
     public function getPaymentMethods(): ?array
@@ -251,15 +252,29 @@ final class InitializeRequest extends Request
         return $this->order;
     }
 
-
     public function getRiskFactors(): ?RiskFactors
     {
         return $this->riskFactors;
     }
 
-
     public function getCardForm(): ?CardForm
     {
         return $this->cardForm;
+    }
+
+    public function getRedirectNotifyUrls(): ?RedirectNotifyUrls
+    {
+        return $this->redirectNotifyUrls;
+    }
+
+    public function getNotification(): ?Notification
+    {
+        return $this->notification;
+    }
+
+    public function setNotification(?Notification $notification): self
+    {
+        $this->notification = $notification;
+        return $this;
     }
 }

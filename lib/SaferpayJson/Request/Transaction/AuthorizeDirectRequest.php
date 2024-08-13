@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Ticketpark\SaferpayJson\Request\Transaction;
 
 use JMS\Serializer\Annotation\SerializedName;
-use JMS\Serializer\Annotation\Type;
 use Ticketpark\SaferpayJson\Request\Container\Authentication;
+use Ticketpark\SaferpayJson\Request\Container\Order;
 use Ticketpark\SaferpayJson\Request\Container\Payer;
 use Ticketpark\SaferpayJson\Request\Container\RegisterAlias;
+use Ticketpark\SaferpayJson\Request\Container\RiskFactors;
 use Ticketpark\SaferpayJson\Request\Request;
 use Ticketpark\SaferpayJson\Request\Container\Payment;
 use Ticketpark\SaferpayJson\Request\Container\PaymentMeans;
@@ -22,42 +23,53 @@ final class AuthorizeDirectRequest extends Request
     public const API_PATH = '/Payment/v1/Transaction/AuthorizeDirect';
     public const RESPONSE_CLASS = AuthorizeDirectResponse::class;
 
+    public const INITIATOR_MERCHANT = 'MERCHANT';
+    public const INITIATOR_PAYER = 'PAYER';
+
     /**
-     * @var string
      * @SerializedName("TerminalId")
      */
-    private $terminalId;
+    private string $terminalId;
 
     /**
-     * @var Payment
      * @SerializedName("Payment")
      */
-    private $payment;
+    private Payment $payment;
 
     /**
-     * @var PaymentMeans
      * @SerializedName("PaymentMeans")
      */
-    private $paymentMeans;
+    private PaymentMeans $paymentMeans;
 
     /**
-     * @var Authentication|null
      * @SerializedName("Authentication")
      */
-    private $authentication;
+    private ?Authentication $authentication = null;
 
     /**
-     * @var RegisterAlias|null
      * @SerializedName("RegisterAlias")
      */
-    private $registerAlias;
+    private ?RegisterAlias $registerAlias = null;
 
     /**
-     * @var Payer|null
      * @SerializedName("Payer")
      */
-    private $payer;
+    private ?Payer $payer = null;
 
+    /**
+     * @SerializedName("Order")
+     */
+    private ?Order $order = null;
+
+    /**
+     * @SerializedName("RiskFactors")
+     */
+    private ?RiskFactors $riskFactors = null;
+
+    /**
+     * @SerializedName("Initiator")
+     */
+    private ?string $initiator = null;
 
     public function __construct(
         RequestConfig $requestConfig,
@@ -141,6 +153,39 @@ final class AuthorizeDirectRequest extends Request
     {
         $this->payer = $payer;
 
+        return $this;
+    }
+
+    public function getOrder(): ?Order
+    {
+        return $this->order;
+    }
+
+    public function setOrder(?Order $order): self
+    {
+        $this->order = $order;
+        return $this;
+    }
+
+    public function getRiskFactors(): ?RiskFactors
+    {
+        return $this->riskFactors;
+    }
+
+    public function setRiskFactors(?RiskFactors $riskFactors): self
+    {
+        $this->riskFactors = $riskFactors;
+        return $this;
+    }
+
+    public function getInitiator(): ?string
+    {
+        return $this->initiator;
+    }
+
+    public function setInitiator(?string $initiator): self
+    {
+        $this->initiator = $initiator;
         return $this;
     }
 

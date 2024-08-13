@@ -1,8 +1,6 @@
 # SaferpayJsonApi
 
 [![Build Status](https://github.com/Ticketpark/SaferpayJsonApi/actions/workflows/tests.yml/badge.svg)](https://github.com/Ticketpark/SaferpayJsonApi/actions)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ticketpark/saferpayjsonapi/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ticketpark/saferpayjsonapi/?branch=master)
-
 
 A php library to use the [Saferpay Json API](http://saferpay.github.io/jsonapi/).
 
@@ -26,10 +24,10 @@ Have a look at the [example folder](/example) for more.
 
 ## Documentation
 
+This library is currently [based on v1.40 of the Saferpay JSON API](https://saferpay.github.io/jsonapi/1.40/index.html).
+
 Find the most current documentation of the Saferpay JSON API here:<br>
 https://saferpay.github.io/jsonapi/
-
-This library is currently based on v1.20 of the Saferpay JSON API.
 
 ## Contribution
 You are [welcome to contribute](/.github/contributing.md) to this repo.

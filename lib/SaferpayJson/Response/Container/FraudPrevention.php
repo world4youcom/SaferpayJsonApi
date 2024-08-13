@@ -9,13 +9,12 @@ use JMS\Serializer\Annotation\SerializedName;
 final class FraudPrevention
 {
     public const APPROVED = 'APPROVED';
-    public const MANUAL_REVIEW = 'MANUAL_REVIEW';
+    public const CHALLENGED = 'CHALLENGED';
 
     /**
-     * @var string|null
      * @SerializedName("Result")
      */
-    private $result;
+    private ?string $result = null;
 
     public function getResult(): ?string
     {

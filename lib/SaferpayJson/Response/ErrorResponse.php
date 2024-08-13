@@ -6,69 +6,70 @@ namespace Ticketpark\SaferpayJson\Response;
 
 use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Type;
+use Ticketpark\SaferpayJson\Response\Container\Risk;
 
 class ErrorResponse extends Response
 {
-    public const BEHAVIOUR_ABORT = 'ABORT';
+    public const BEHAVIOUR_DO_NOT_RETRY = 'DO_NOT_RETRY';
     public const BEHAVIOUR_OTHER_MEANS = 'OTHER_MEANS';
     public const BEHAVIOUR_RETRY = 'RETRY';
     public const BEHAVIOUR_RETRY_LATER = 'RETRY_LATER';
 
     /**
-     * @var string|null
+     * @SerializedName("Risk")
+     */
+    private ?Risk $risk = null;
+
+    /**
      * @SerializedName("Behavior")
-     * @Type("string")
      */
-    private $behaviour;
+    private ?string $behaviour = null;
 
     /**
-     * @var string|null
      * @SerializedName("ErrorName")
-     * @Type("string")
      */
-    private $errorName;
+    private ?string $errorName = null;
 
     /**
-     * @var string|null
      * @SerializedName("ErrorMessage")
-     * @Type("string")
      */
-    private $errorMessage;
+    private ?string $errorMessage = null;
 
     /**
-     * @var string|null
      * @SerializedName("TransactionId")
-     * @Type("string")
      */
-    private $transactionId;
+    private ?string $transactionId = null;
 
     /**
-     * @var array|null
      * @SerializedName("ErrorDetail")
      * @Type("array")
      */
-    private $errorDetail = [];
+    private array $errorDetail = [];
 
     /**
-     * @var string|null
      * @SerializedName("ProcessorName")
-     * @Type("string")
      */
-    private $processorName;
+    private ?string $processorName = null;
 
     /**
-     * @var string|null
      * @SerializedName("ProcessorResult")
-     * @Type("string")
      */
-    private $processorResult;
+    private ?string $processorResult = null;
 
     /**
-     * @var string|null
      * @SerializedName("ProcessorMessage")
-     * @Type("string")
      */
-    private $processorMessage;
+    private ?string $processorMessage = null;
+
+    /**
+     * @SerializedName("PayerMessage")
+     */
+    private ?string $payerMessage = null;
+
+    public function getRisk(): ?Risk
+    {
+        return $this->risk;
+    }
 
     public function getBehaviour(): ?string
     {
@@ -108,5 +109,10 @@ class ErrorResponse extends Response
     public function getProcessorMessage(): ?string
     {
         return $this->processorMessage;
+    }
+
+    public function getPayerMessage(): ?string
+    {
+        return $this->payerMessage;
     }
 }

@@ -18,28 +18,24 @@ final class AuthorizeRequest extends Request
     public const RESPONSE_CLASS = AuthorizeResponse::class;
 
     /**
-     * @var string
      * @SerializedName("Token")
      */
-    private $token;
+    private string $token;
 
     /**
-     * @var string|null
      * @SerializedName("Condition")
      */
-    private $condition;
+    private ?string $condition = null;
 
     /**
-     * @var string|null
      * @SerializedName("VerificationCode")
      */
-    private $verificationCode;
+    private ?string $verificationCode = null;
 
     /**
-     * @var RegisterAlias|null
      * @SerializedName("RegisterAlias")
      */
-    private $registerAlias;
+    private ?RegisterAlias $registerAlias = null;
 
     public function __construct(
         RequestConfig $requestConfig,
@@ -70,20 +66,27 @@ final class AuthorizeRequest extends Request
         return $this->registerAlias;
     }
 
-    public function setCondition(?string $condition): void
+    public function setCondition(?string $condition): self
     {
         $this->condition = $condition;
+
+        return $this;
     }
 
-    public function setVerificationCode(?string $verificationCode): void
+    public function setVerificationCode(?string $verificationCode): self
     {
         $this->verificationCode = $verificationCode;
+
+        return $this;
     }
 
-    public function setRegisterAlias(?RegisterAlias $registerAlias): void
+    public function setRegisterAlias(?RegisterAlias $registerAlias): self
     {
         $this->registerAlias = $registerAlias;
+
+        return $this;
     }
+
     public function execute(): AuthorizeResponse
     {
         /** @var AuthorizeResponse $response */
