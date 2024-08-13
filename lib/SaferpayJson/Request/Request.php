@@ -25,10 +25,9 @@ abstract class Request
     private const ERROR_RESPONSE_CLASS = ErrorResponse::class;
 
     /**
-     * @var RequestConfig
      * @Exclude
      */
-    private $requestConfig;
+    private RequestConfig $requestConfig;
 
     abstract public function execute(): Response;
 
@@ -51,7 +50,9 @@ abstract class Request
     public function getRequestHeader(): RequestHeader
     {
         return new RequestHeader(
-            $this->requestConfig->getCustomerId()
+            $this->requestConfig->getCustomerId(),
+            $this->requestConfig->getRequestId(),
+            $this->requestConfig->getRetryIndicator()
         );
     }
 

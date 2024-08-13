@@ -5,36 +5,28 @@ declare(strict_types=1);
 namespace Ticketpark\SaferpayJson\Request;
 
 use GuzzleHttp\Client;
+use InvalidArgumentException;
 
 final class RequestConfig
 {
-    /**
-     * @var string
-     */
-    private $apiKey;
+    public const MIN_RETRY_INDICATOR = 0;
+    public const MAX_RETRY_INDICATOR = 9;
 
-    /**
-     * @var string
-     */
-    private $apiSecret;
+    private string $apiKey;
+    private string $apiSecret;
+    private string $customerId;
+    private bool $test;
 
-    /**
-     * @var string
-     */
-    private $customerId;
+    private ?Client $client = null;
+    private ?string $requestId = null;
+    private int $retryIndicator = self::MIN_RETRY_INDICATOR;
 
-    /**
-     * @var bool
-     */
-    private $test;
-
-    /**
-     * @var \GuzzleHttp\Client
-     */
-    private $client;
-
-    public function __construct(string $apiKey, string $apiSecret, string $customerId, bool $test = false)
-    {
+    public function __construct(
+        string $apiKey,
+        string $apiSecret,
+        string $customerId,
+        bool   $test = false
+    ) {
         $this->apiKey = $apiKey;
         $this->apiSecret = $apiSecret;
         $this->customerId = $customerId;
@@ -75,5 +67,37 @@ final class RequestConfig
         }
 
         return $this->client;
+    }
+
+    public function setRequestId(?string $requestId): self
+    {
+        $this->requestId = $requestId;
+
+        return $this;
+    }
+
+    public function getRequestId(): ?string
+    {
+        return $this->requestId;
+    }
+
+    public function setRetryIndicator(int $retryIndicator): self
+    {
+        if ($retryIndicator < self::MIN_RETRY_INDICATOR || $retryIndicator > self::MAX_RETRY_INDICATOR) {
+            throw new InvalidArgumentException(sprintf(
+                'Retry indicator range: inclusive between %s and %s.',
+                self::MIN_RETRY_INDICATOR,
+                self::MAX_RETRY_INDICATOR
+            ));
+        }
+
+        $this->retryIndicator = $retryIndicator;
+
+        return $this;
+    }
+
+    public function getRetryIndicator(): int
+    {
+        return $this->retryIndicator;
     }
 }

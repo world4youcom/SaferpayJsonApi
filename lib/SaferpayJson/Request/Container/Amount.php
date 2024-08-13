@@ -5,22 +5,18 @@ declare(strict_types=1);
 namespace Ticketpark\SaferpayJson\Request\Container;
 
 use JMS\Serializer\Annotation\SerializedName;
-use JMS\Serializer\Annotation\Type;
 
 final class Amount
 {
     /**
-     * @var int
      * @SerializedName("Value")
-     * @Type("integer")
      */
-    private $value;
+    private int $value;
 
     /**
-     * @var string
      * @SerializedName("CurrencyCode")
      */
-    private $currencyCode;
+    private string $currencyCode;
 
     public function __construct(int $value, string $currencyCode)
     {

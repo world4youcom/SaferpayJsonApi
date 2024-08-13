@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Ticketpark\SaferpayJson\Request\SecureCardData;
 
 use JMS\Serializer\Annotation\SerializedName;
-use JMS\Serializer\Annotation\Type;
 use Ticketpark\SaferpayJson\Request\Container\CardForm;
 use Ticketpark\SaferpayJson\Request\Container\Check;
 use Ticketpark\SaferpayJson\Request\Container\PaymentMeans;
 use Ticketpark\SaferpayJson\Request\Container\RegisterAlias;
-use Ticketpark\SaferpayJson\Request\Container\ReturnUrls;
+use Ticketpark\SaferpayJson\Request\Container\ReturnUrl;
+use Ticketpark\SaferpayJson\Request\Container\SecureCardData\Notification;
 use Ticketpark\SaferpayJson\Request\Container\Styling;
 use Ticketpark\SaferpayJson\Request\Request;
 use Ticketpark\SaferpayJson\Request\RequestCommonsTrait;
@@ -24,7 +24,6 @@ final class AliasInsertRequest extends Request
     public const RESPONSE_CLASS = AliasInsertResponse::class;
 
     public const PAYMENT_METHOD_AMEX = "AMEX";
-    public const PAYMENT_METHOD_BANCONTACT = "BANCONTACT";
     public const PAYMENT_METHOD_BONUS = "BONUS";
     public const PAYMENT_METHOD_DINERS = "DINERS";
     public const PAYMENT_METHOD_DIRECTDEBIT = "DIRECTDEBIT";
@@ -32,10 +31,11 @@ final class AliasInsertRequest extends Request
     public const PAYMENT_METHOD_MAESTRO = "MAESTRO";
     public const PAYMENT_METHOD_MASTERCARD = "MASTERCARD";
     public const PAYMENT_METHOD_MYONE = "MYONE";
+    public const PAYMENT_METHOD_POSTFINANCEPAY = "POSTFINANCEPAY";
     public const PAYMENT_METHOD_SAFERPAYTEST = "SAFERPAYTEST";
-    public const PAYMENT_METHOD_UNIONPAY = "UNIONPAY";
     public const PAYMENT_METHOD_VISA = "VISA";
-    public const PAYMENT_METHOD_VPAY = "VPAY";
+    public const PAYMENT_METHOD_WECHATPAY = "WECHATPAY";
+    public const PAYMENT_METHOD_WLCRYPTOPAYMENTS = "WLCRYPTOPAYMENTS";
 
     public const TYPE_CARD = 'CARD';
     public const TYPE_BANK_ACCOUNT = 'BANK_ACCOUNT';
@@ -43,70 +43,65 @@ final class AliasInsertRequest extends Request
     public const TYPE_TWINT = 'TWINT';
 
     /**
-     * @var RegisterAlias
      * @SerializedName("RegisterAlias")
      */
-    private $registerAlias;
+    private RegisterAlias $registerAlias;
 
     /**
-     * @var string
      * @SerializedName("Type")
-     * @Type("string")
      */
-    private $type;
+    private string $type;
 
     /**
-     * @var ReturnUrls
-     * @SerializedName("ReturnUrls")
+     * @SerializedName("ReturnUrl")
      */
-    private $returnUrls;
+    private ReturnUrl $returnUrl;
 
     /**
-     * @var Styling|null
      * @SerializedName("Styling")
      */
-    private $styling;
+    private ?Styling $styling = null;
 
     /**
-     * @var string|null
      * @SerializedName("LanguageCode")
-     * @Type("string")
      */
-    private $languageCode;
+    private ?string $languageCode = null;
 
     /**
-     * @var Check|null
      * @SerializedName("Check")
      */
-    private $check;
+    private ?Check $check = null;
 
     /**
      * @var array<string>|null
      * @SerializedName("PaymentMethods")
      */
-    private $paymentMethods;
+    private ?array $paymentMethods = null;
 
     /**
-     * @var CardForm|null
      * @SerializedName("CardForm")
      */
-    private $cardForm;
+    private ?CardForm $cardForm = null;
 
     /**
-     * @var PaymentMeans|null
      * @SerializedName("PaymentMeans")
      */
-    private $paymentMeans;
+    private ?PaymentMeans $paymentMeans = null;
+
+    /**
+     * @SerializedName("Notification")
+     */
+    private ?Notification $notification = null;
 
     public function __construct(
         RequestConfig $requestConfig,
         RegisterAlias $registerAlias,
         string $type,
-        ReturnUrls $returnUrls
+        ReturnUrl $returnUrl
     ) {
         $this->registerAlias = $registerAlias;
         $this->type = $type;
-        $this->returnUrls = $returnUrls;
+        $this->returnUrl = $returnUrl;
 
         parent::__construct($requestConfig);
     }
@@ -135,14 +130,14 @@ final class AliasInsertRequest extends Request
         return $this;
     }
 
-    public function getReturnUrls(): ReturnUrls
+    public function getReturnUrl(): ReturnUrl
     {
-        return $this->returnUrls;
+        return $this->returnUrl;
     }
 
-    public function setReturnUrls(ReturnUrls $returnUrls): self
+    public function setReturnUrl(ReturnUrl $returnUrl): self
     {
-        $this->returnUrls = $returnUrls;
+        $this->returnUrl = $returnUrl;
 
         return $this;
     }
@@ -225,5 +220,16 @@ final class AliasInsertRequest extends Request
         $response = $this->doExecute();
 
         return $response;
+    }
+
+    public function getNotification(): ?Notification
+    {
+        return $this->notification;
+    }
+
+    public function setNotification(?Notification $notification): self
+    {
+        $this->notification = $notification;
+        return $this;
     }
 }

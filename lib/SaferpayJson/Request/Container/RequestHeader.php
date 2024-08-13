@@ -5,41 +5,40 @@ declare(strict_types=1);
 namespace Ticketpark\SaferpayJson\Request\Container;
 
 use JMS\Serializer\Annotation\SerializedName;
+use Ticketpark\SaferpayJson\Request\RequestConfig;
 
 final class RequestHeader
 {
     /**
-     * @var string
      * @SerializedName("SpecVersion")
      */
-    private $specVersion = '1.20';
+    private string $specVersion = '1.40';
 
     /**
-     * @var string
      * @SerializedName("CustomerId")
      */
-    private $customerId;
+    private string $customerId;
 
     /**
-     * @var string|null
      * @SerializedName("RequestId")
      */
-    private $requestId;
+    private ?string $requestId;
 
     /**
-     * @var int
      * @SerializedName("RetryIndicator")
      */
-    private $retryIndicator = 0;
+    private int $retryIndicator;
 
     /**
-     * @var ClientInfo|null
      * @SerializedName("ClientInfo")
      */
-    private $clientInfo;
+    private ?ClientInfo $clientInfo = null;
 
-    public function __construct(string $customerId, string $requestId = null, int $retryIndicator = 0)
-    {
+    public function __construct(
+        string $customerId,
+        string $requestId = null,
+        int    $retryIndicator = RequestConfig::MIN_RETRY_INDICATOR
+    ) {
         $this->customerId = $customerId;
         $this->requestId = $requestId;
         $this->retryIndicator = $retryIndicator;

@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Ticketpark\SaferpayJson\Request\Container;
 
 use JMS\Serializer\Annotation\SerializedName;
-use JMS\Serializer\Annotation\Type;
 
 final class Order
 {
     /**
-     * @var array<OrderItem>|null
+     * @var array<OrderItem>
      * @SerializedName("Items")
      */
-    private $items = [];
+    private ?array $items = [];
 
     public function getItems(): ?array
     {

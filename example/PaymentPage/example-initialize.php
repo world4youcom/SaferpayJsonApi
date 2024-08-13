@@ -28,9 +28,8 @@ $amount = new Container\Amount(
 $payment = new Container\Payment($amount);
 $payment->setDescription('Order No. 12839');
 
-$returnUrls = new Container\ReturnUrls(
-    'http://www.mysite.ch/success?orderId=12839',
-    'http://www.mysite.ch/fail'
+$returnUrl = new Container\ReturnUrl(
+    'http://www.mysite.ch/success?orderId=12839'
 );
 
 // -----------------------------
@@ -41,7 +40,7 @@ $initializeRequest = new InitializeRequest(
     $requestConfig,
     $terminalId,
     $payment,
-    $returnUrls
+    $returnUrl
 );
 
 // Note: More data can be provided to InitializeRequest with setters,
@@ -76,4 +75,4 @@ echo 'Redirect to: ' . $response->getRedirectUrl() ."<br>\n";
 // -----------------------------
 // Step 7:
 // On success page and notification url, assert that the payment has been successful.
-// -> see example-assert.php
+// see: example-assert.php
